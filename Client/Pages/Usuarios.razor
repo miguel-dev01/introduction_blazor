@@ -1,0 +1,68 @@
+﻿@page "/counter"
+@page "/usuarios"
+@using blazor_test.Shared
+@inject HttpClient Http
+
+<PageTitle>Usuarios</PageTitle>
+
+<h1>Usuarios</h1>
+
+<p role="status">Tabla general de usuarios</p>
+
+@* Implementamos la tabla *@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Listado)
+        {
+            <tr>
+                <td>@i.Nombre</td>
+                <td>@i.Correo</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br />
+<label>Nombre</label>
+<input type="text" @bind-value=user.Nombre />
+<label>Correo</label>
+<input type="text" @bind-value=user.Correo />
+
+<br />
+<br />
+<button class="btn btn-primary" @onclick=CreateUser>Crear usuario</button>
+<br />
+<br />
+<label>@Response</label>
+
+@code {
+    String Response = "";
+    Usuario user = new Usuario();
+    public static List<Usuario> Listado = new List<Usuario>();
+
+    async Task CreateUser()
+    {
+        var response = await Http.PostAsJsonAsync("api/User/NewUser", user);
+
+        Response = await response.Content.ReadAsStringAsync();
+        await RefreshTable();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshTable();
+    }
+
+    async Task RefreshTable()
+    {
+        var users = await Http.GetFromJsonAsync<List<Usuario>>("api/User/GetUsers");
+        Listado = users;
+    }
+
+}

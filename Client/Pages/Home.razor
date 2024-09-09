@@ -1,0 +1,37 @@
+﻿@page "/"
+@inject HttpClient Http
+
+<PageTitle>Blazor Home</PageTitle>
+
+<h1>FINANZAS PERSONALES</h1>
+<br />
+
+Estado de la conexion actual
+
+<p>@connectionServer</p>
+<p>@connectionUsers</p>
+<p>@connectionMovements</p>
+
+@code{
+    String connectionServer = "En espera...";
+    String connectionUsers = "En espera...";
+    String connectionMovements = "En espera...";
+
+    async Task TestConnection()
+    {
+        var response = await Http.GetStringAsync("https://localhost:7152/api/User/ConnectServer");
+
+        var responseUserTable = await Http.GetStringAsync("https://localhost:7152/api/User/ConnectUserTable");
+
+        var responseMovementTable = await Http.GetStringAsync("https://localhost:7152/api/Movimiento/ConnectMovementTable");
+
+        connectionServer = response;
+        connectionUsers = responseUserTable;
+        connectionMovements = responseMovementTable;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await TestConnection();
+    }
+}

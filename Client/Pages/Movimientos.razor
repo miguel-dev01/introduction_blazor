@@ -1,0 +1,139 @@
+﻿@page "/fetchdata"
+@page "/movimientos"
+@inject HttpClient Http
+@using blazor_test.Shared
+<PageTitle>Movimientos</PageTitle>
+
+<h1>Movimientos</h1>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Nombre</th>
+
+            <th scope="col">Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var movimiento in MovimientosListado)
+        {
+            <tr>
+                <th scope="row">@movimiento.Id</th>
+                <th scope="row">@movimiento.Fecha</th>
+                <th scope="row">@movimiento.Descripcion</th>
+                <th scope="row">@movimiento.Cantidad</th>
+                <th scope="row">@movimiento.Tipo</th>
+                <th scope="row">@movimiento.Usuario.Nombre</th>
+
+                <td>
+                    <button class="btn btn-success" @onclick="(()=>Asignar(movimiento))">Editar</button>
+                    <button class="btn btn-warning" @onclick="(()=>EliminarMovimiento(movimiento.Id))">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<h3>Nuevo Movimiento</h3>
+
+
+
+<label>Usuario</label>
+<EditForm Model="@movimiento">
+    <InputSelect class="form-control" @bind-Value="@movimiento.UsuarioId">
+        <option selected value=0>Elegir Usuario</option>
+        @foreach (var usuario in Listado)
+        {
+            <option value="@usuario.Id">@usuario.Nombre</option>
+        }
+    </InputSelect>
+</EditForm>
+<label>Contidad</label>
+<input class="form-control" type="number" @bind-value=movimiento.Cantidad />
+<label>Tipo</label>
+<select class="form-control" @bind="movimiento.Tipo">
+    <option selected value="Ingreso">Ingreso</option>
+    <option selected value="Egreso">Egreso</option>
+</select>
+<label>Descripcion</label>
+
+<input type="text" class="form-control" @bind-value=movimiento.Descripcion />
+<br />
+<button class="btn btn-primary" @onclick="CrearNuevoMovimiento">Guardar</button>
+
+<br />
+<br />
+<br />
+<h3>Formulario de edicion</h3>
+<br />
+
+<EditForm Model="@editarMovimiento">
+    <InputSelect class="form-control" @bind-Value="@editarMovimiento.UsuarioId">
+        <option selected value=0>Elegir Usuario</option>
+        @foreach (var usuario in Listado)
+        {
+            <option value="@usuario.Id">@usuario.Nombre</option>
+        }
+    </InputSelect>
+</EditForm>
+<label>Contidad</label>
+<input class="form-control" type="number" @bind-value=editarMovimiento.Cantidad />
+<label>Tipo</label>
+<select class="form-control" @bind="editarMovimiento.Tipo">
+    <option selected value="Ingreso">Ingreso</option>
+    <option selected value="Egreso">Egreso</option>
+</select>
+<label>Descripcion</label>
+<input type="text" class="form-control" @bind-value=editarMovimiento.Descripcion />
+<br />
+<button class="btn btn-primary" @onclick="GuardarCambios">Guardar Cambios</button>
+
+@code {
+    public static List<Usuario> Listado = new List<Usuario>();
+    public static List<Movimiento> MovimientosListado = new List<Movimiento>();
+    Usuario usuario = new Usuario();
+    Movimiento movimiento = new Movimiento();
+    Movimiento editarMovimiento = new Movimiento();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+    }
+
+    async Task CrearNuevoMovimiento()
+    {
+        var response = await Http.PostAsJsonAsync("api/Movimiento/NewMovement", movimiento);
+        await Refresh();
+    }
+
+    async Task Refresh()
+    {
+        var usuarios = await Http.GetFromJsonAsync<List<Usuario>>("api/User/GetUsers");
+        Listado = usuarios;
+
+        var movimientos = await Http.GetFromJsonAsync<List<Movimiento>>("api/Movimiento/GetMovements");
+        MovimientosListado = movimientos;
+    }
+
+    async Task EliminarMovimiento(int id)
+    {
+        var response = await Http.DeleteAsync($"api/Movimiento/{id}");
+        await Refresh();
+    }
+
+    async Task Asignar(Movimiento movimiento)
+    {
+        editarMovimiento = movimiento;
+    }
+
+    async Task GuardarCambios()
+    {
+        var response = await Http.PutAsJsonAsync($"api/Movimiento/{editarMovimiento.Id}", editarMovimiento);
+        await Refresh();
+    }
+}
