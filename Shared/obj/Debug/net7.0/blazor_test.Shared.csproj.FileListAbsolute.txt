@@ -1,0 +1,11 @@
+C:\Users\MSG\source\repos\blazor_test\Shared\bin\Debug\net7.0\blazor_test.Shared.deps.json
+C:\Users\MSG\source\repos\blazor_test\Shared\bin\Debug\net7.0\blazor_test.Shared.dll
+C:\Users\MSG\source\repos\blazor_test\Shared\bin\Debug\net7.0\blazor_test.Shared.pdb
+C:\Users\MSG\source\repos\blazor_test\Shared\obj\Debug\net7.0\blazor_test.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\MSG\source\repos\blazor_test\Shared\obj\Debug\net7.0\blazor_test.Shared.AssemblyInfoInputs.cache
+C:\Users\MSG\source\repos\blazor_test\Shared\obj\Debug\net7.0\blazor_test.Shared.AssemblyInfo.cs
+C:\Users\MSG\source\repos\blazor_test\Shared\obj\Debug\net7.0\blazor_test.Shared.csproj.CoreCompileInputs.cache
+C:\Users\MSG\source\repos\blazor_test\Shared\obj\Debug\net7.0\blazor_test.Shared.dll
+C:\Users\MSG\source\repos\blazor_test\Shared\obj\Debug\net7.0\refint\blazor_test.Shared.dll
+C:\Users\MSG\source\repos\blazor_test\Shared\obj\Debug\net7.0\blazor_test.Shared.pdb
+C:\Users\MSG\source\repos\blazor_test\Shared\obj\Debug\net7.0\ref\blazor_test.Shared.dll
